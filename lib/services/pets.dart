@@ -46,7 +46,35 @@ class DioClient {
 
     return newPet; // Return the created Pet object
   }
+
+  // Function to update a pet
+  Future<Pet> updatePet(Pet pet) async {
+    try {
+      // Create FormData from the pet data
+      FormData data = FormData.fromMap({
+        'name': pet.name,
+        'age': pet.age,
+        'gender': pet.gender,
+        // Add other properties as needed
+      });
+
+      // Send a PUT request to the specified endpoint with pet.id
+      Response response = await _dio.put(
+        "https://coded-pets-api-crud.eapi.joincoded.com/pets/${pet.id}", // Inject pet.id in the URL
+        data: data, // Pass the FormData
+      );
+
+      return Pet.fromJson(response.data); // Return the updated Pet object
+    } on DioError catch (error) {
+      print("Error updating pet: $error");
+      throw Exception(
+          'Failed to update pet: ${error.message}'); // Handle the error accordingly
+    }
+  }
 }
+
+
+
 
 /*class DioClient {
   final Dio _dio = Dio();
